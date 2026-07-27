@@ -41,6 +41,14 @@ button {
 button:hover { 
     background: #0056b3; 
 }
+.mine-btn {
+    background: #28a745;
+    font-size: 16px;
+    margin: 15px 0;
+}
+.mine-btn:hover {
+    background: #218838;
+}
 #dashboard p {
     margin: 15px 0 5px 0;
     font-weight: bold;
