@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexCoin Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; font-family: sans-serif; }
+        .admin-container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .admin-card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 20px; }
+        .req-item { background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .req-details { flex: 1; min-width: 200px; }
+        .req-details p { margin: 2px 0; font-size: 14px; }
+        .req-actions { display: flex; gap: 10px; }
+        .btn-approve { background: #10b981; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-reject { background: #ef4444; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .status-pending { background: #f59e0b; color: black; }
+        .status-approved { background: #10b981; color: white; }
+        .status-rejected { background: #ef4444; color: white; }
+        .login-box { text-align: center; margin-top: 50px; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Login -->
+        <div id="adminLogin" class="admin-card login-box">
+            <h2><i class="fa-solid fa-shield-halved"></i> Admin Access</h2>
+            <p>Log in with your NexCoin Admin account.</p>
+            <input type="email" id="adminEmail" class="input-field" placeholder="Admin Email">
+            <input type="password" id="adminPass" class="input-field" placeholder="Admin Password">
+            <button id="adminLoginBtn" class="btn btn-primary">Login</button>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" style="display:none;">
+            <div class="admin-header">
+                <h2><i class="fa-solid fa-shield-halved"></i> NexCoin Admin</h2>
+                <button id="adminLogoutBtn" class="btn btn-logout">Logout</button>
+            </div>
+
+            <!-- Deposits -->
+            <div class="admin-card">
+                <h3><i class="fa-solid fa-money-bill-trend-up"></i> Deposit Requests</h3>
+                <div id="depositsList"></div>
+            </div>
+
+            <!-- Withdrawals -->
+            <div class="admin-card">
+                <h3><i class="fa-solid fa-money-bill-transfer"></i> Withdrawal Requests</h3>
+                <div id="withdrawalsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkJdxeqUbOclin_dd_9mp-J7Uvf-xFQZg",
+            authDomain: "nexcoin-d8747.firebaseapp.com",
+            databaseURL: "https://nexcoin-d8747-default-rtdb.firebaseio.com",
+            projectId: "nexcoin-d8747",
+            storageBucket: "nexcoin-d8747.firebasestorage.app",
+            messagingSenderId: "326445464976",
+            appId: "1:326445464976:web:095ee241d952317ac78715",
+            measurementId: "G-WFJRG8LPX5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        window.firebaseAuth = auth;
+        window.firebaseDb = db;
+    </script>
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
