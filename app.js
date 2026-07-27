@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // Wait for Firebase to initialize
 window.addEventListener('load', () => {
@@ -10,7 +10,7 @@ window.addEventListener('load', () => {
     const urlParams = new URLSearchParams(window.location.search);
     let inviteCode = urlParams.get('inviteCode');
     
-    // If no invite code, generate a random one or set to null
+    // If no invite code, set to None
     if (!inviteCode) {
         inviteCode = "None";
     }
@@ -26,16 +26,17 @@ window.addEventListener('load', () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Generate a unique referral code for this new user (e.g., first 6 chars of UID)
+            // Generate a unique referral code for this new user
             const newRefCode = user.uid.substring(0, 6).toUpperCase();
 
-            // Create user document in Firestore
-            await setDoc(doc(db, "users", user.uid), {
+            // Create user document in Realtime Database
+            // Path: users -> user.uid -> { data }
+            await set(ref(db, 'users/' + user.uid), {
                 email: user.email,
                 balance: 0, // Start with 0 balance
                 referredBy: inviteCode !== "None" ? inviteCode : null,
                 myRefCode: newRefCode,
-                createdAt: new Date()
+                createdAt: new Date().toISOString()
             });
 
             alert("Sign up successful!");
@@ -68,14 +69,16 @@ window.addEventListener('load', () => {
             document.getElementById('auth-section').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
 
-            // Fetch user data from Firestore
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (userDoc.exists()) {
-                const userData = userDoc.data();
+            // Fetch user data from Realtime Database
+            const userRef = ref(db, 'users/' + user.uid);
+            const snapshot = await get(userRef);
+            
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
                 document.getElementById('balance').innerText = userData.balance;
                 
                 // Set their personal referral link
-                const refLink = `https://yourusername.github.io/my-crypto-app/?inviteCode=${userData.myRefCode}`;
+                const refLink = `https://locky5533-lgtm.github.io/NexCoin/?inviteCode=${userData.myRefCode}`;
                 document.getElementById('refLink').value = refLink;
             }
         } else {
