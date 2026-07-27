@@ -8,16 +8,21 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .input-field:focus { outline: none; border-color: #3b82f6; }
 .ref-box { background: #0f172a; padding: 10px; border-radius: 8px; margin: 15px 0; font-size: 13px; color: #64748b; }
 .btn { width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 15px; transition: 0.2s; }
-.btn-primary { background: #3b82f6; color: white; }
-.btn-primary:hover { background: #2563eb; }
-.btn-secondary { background: transparent; color: #3b82f6; border: 1px solid #3b82f6; }
-.btn-secondary:hover { background: #1e293b; }
-.btn-success { background: #10b981; color: white; width: auto; padding: 10px 20px; font-size: 14px; }
-.btn-success:hover { background: #059669; }
-.btn-logout { background: #ef4444; color: white; width: auto; padding: 8px 16px; font-size: 14px; margin: 0; }
-.btn-logout:hover { background: #dc2626; }
+.btn-primary { background: #3b82f6; color: white; } .btn-primary:hover { background: #2563eb; }
+.btn-secondary { background: transparent; color: #3b82f6; border: 1px solid #3b82f6; } .btn-secondary:hover { background: #1e293b; }
+.btn-success { background: #10b981; color: white; width: auto; padding: 10px 20px; font-size: 14px; } .btn-success:hover { background: #059669; }
 
 .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.header-buttons { display: flex; gap: 10px; }
+.btn-header { background: #334155; color: white; width: auto; padding: 8px 16px; margin: 0; font-size: 14px; }
+.btn-logout { background: #ef4444; color: white; width: auto; padding: 8px 16px; font-size: 14px; margin: 0; } .btn-logout:hover { background: #dc2626; }
+
+.leaderboard-card { padding: 20px; }
+.leaderboard-card h3 { margin-top: 0; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+.leaderboard-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #334155; font-size: 14px; }
+.leaderboard-item:last-child { border-bottom: none; }
+.lb-score { color: #10b981; font-weight: bold; }
+
 .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 .overview-card { padding: 20px; text-align: center; margin: 0; display: flex; flex-direction: column; align-items: center; }
 .overview-icon { font-size: 24px; margin-bottom: 10px; }
@@ -25,35 +30,24 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .overview-card h4 { margin: 0 0 5px 0; color: #64748b; font-size: 12px; text-transform: uppercase; }
 .overview-value { margin: 0 0 10px 0; font-size: 18px; font-weight: bold; color: #e2e8f0; }
 .overview-value.running { color: #10b981; }
-.btn-withdraw-small { background: #334155; color: white; width: 100%; padding: 8px; margin-top: 5px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
-.btn-withdraw-small:hover { background: #ef4444; }
+.btn-withdraw-small { background: #334155; color: white; width: 100%; padding: 8px; margin-top: auto; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; } .btn-withdraw-small:hover { background: #ef4444; }
 
-/* Check-in & Tasks */
 .checkin-card h3, .tasks-card h3, .detail-card h3, .investment-hub h3, .active-investments h3, .referral-card h3 { margin-top: 0; color: #e2e8f0; border-bottom: 1px solid #334155; padding-bottom: 10px; }
 .checkin-info { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
-.checkin-label { color: #64748b; font-size: 12px; margin: 0; }
-.checkin-value { font-size: 20px; font-weight: bold; margin: 5px 0 0 0; color: #3b82f6; }
-.checkin-hint { font-size: 12px; color: #64748b; text-align: center; margin: 0; }
-.task-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; }
-.task-item:last-child { border-bottom: none; }
-.task-item span { font-size: 14px; }
-.btn-task { background: #334155; color: #10b981; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
-.btn-task:disabled { color: #64748b; cursor: not-allowed; }
+.checkin-label { color: #64748b; font-size: 12px; margin: 0; } .checkin-value { font-size: 20px; font-weight: bold; margin: 5px 0 0 0; color: #3b82f6; }
+.task-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; } .task-item:last-child { border-bottom: none; }
+.btn-task { background: #334155; color: #10b981; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; } .btn-task:disabled { color: #64748b; cursor: not-allowed; }
 
 .detail-card { padding: 25px; }
-.detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; }
-.detail-row span:first-child { color: #64748b; } .detail-row span:last-child { font-weight: bold; color: #e2e8f0; }
+.detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; } .detail-row span:first-child { color: #64748b; } .detail-row span:last-child { font-weight: bold; color: #e2e8f0; }
 
 .product-grid { display: grid; gap: 15px; }
 .product-card { background: #0f172a; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #334155; }
-.product-icon { font-size: 36px; margin-bottom: 10px; }
-.product-icon.green { color: #10b981; } .product-icon.yellow { color: #f59e0b; }
+.product-icon { font-size: 36px; margin-bottom: 10px; } .product-icon.green { color: #10b981; } .product-icon.yellow { color: #f59e0b; }
 .product-card h4 { margin: 0 0 5px 0; color: #e2e8f0; font-size: 18px; }
 .roi { color: #10b981; font-weight: bold; font-size: 14px; margin: 5px 0 10px 0; }
-.invest-details { margin-bottom: 15px; color: #64748b; }
-.profit-text { color: #3b82f6; font-weight: bold; }
-.btn-invest { background: #334155; color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-.btn-invest:hover { background: #3b82f6; }
+.invest-details { margin-bottom: 15px; color: #64748b; } .profit-text { color: #3b82f6; font-weight: bold; }
+.btn-invest { background: #334155; color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; } .btn-invest:hover { background: #3b82f6; }
 
 .empty-text { color: #64748b; font-style: italic; text-align: center; font-size: 13px; }
 .active-investment-item { background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
@@ -61,17 +55,14 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .yield-text { color: #f59e0b; font-weight: bold; }
 .btn-harvest { padding: 8px 12px; font-size: 14px; margin: 0; }
 
-.copy-link-container { display: flex; gap: 10px; align-items: center; }
-.copy-link-container .input-field { margin: 0; flex: 1; }
-.btn-copy { background: #334155; color: white; width: auto; padding: 15px; margin: 0; border: none; border-radius: 8px; cursor: pointer; }
-.btn-copy:hover { background: #3b82f6; }
+.mlm-info { background: #0f172a; padding: 8px; border-radius: 6px; text-align: center; color: #f59e0b; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
+.copy-link-container { display: flex; gap: 10px; align-items: center; } .copy-link-container .input-field { margin: 0; flex: 1; }
+.btn-copy { background: #334155; color: white; width: auto; padding: 15px; margin: 0; border: none; border-radius: 8px; cursor: pointer; } .btn-copy:hover { background: #3b82f6; }
 
-/* Modal */
 .modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; }
 .modal-content { background: #1e293b; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #334155; position: relative; }
 .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; color: #64748b; cursor: pointer; }
 
 #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; align-items: center; }
 .toast { background: #1e293b; color: white; padding: 15px 25px; border-radius: 8px; border-left: 4px solid #10b981; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 14px; display: flex; align-items: center; gap: 10px; opacity: 0; transform: translateY(20px); transition: all 0.3s ease; }
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast i { color: #10b981; }
+.toast.show { opacity: 1; transform: translateY(0); } .toast i { color: #10b981; }
