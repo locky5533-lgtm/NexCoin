@@ -10,6 +10,7 @@
 <body>
     <div id="toast-container"></div>
 
+    <!-- Profile Modal -->
     <div id="profileModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-btn" id="closeProfileModal">&times;</span>
@@ -30,6 +31,29 @@
         </div>
     </div>
 
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" id="closeDepositModal">&times;</span>
+            <h3><i class="fa-solid fa-money-bill-trend-up"></i> Deposit Funds</h3>
+            <p>1 USDT = 100 NEX | 1 GHS = 10 NEX</p>
+            <select id="depositMethod" class="input-field">
+                <option value="USDT (TRC20)">USDT (TRC20)</option>
+                <option value="MTN Mobile Money">MTN Mobile Money</option>
+                <option value="Vodafone Cash">Vodafone Cash</option>
+            </select>
+            <div class="deposit-info-box" id="depositDetails">
+                <p>Send funds to:</p>
+                <p class="deposit-address">TG7xH8s9Kj2M... (USDT)</p>
+                <p class="deposit-address">0551234567 (MoMo)</p>
+            </div>
+            <input type="text" id="depositTxId" placeholder="Transaction ID / Sender Number" class="input-field">
+            <input type="number" id="depositAmountUsd" placeholder="Amount Sent (e.g. $1)" class="input-field">
+            <button id="submitDeposit" class="btn btn-primary">Submit Deposit Request</button>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
     <div id="withdrawModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">&times;</span>
@@ -39,7 +63,6 @@
                 <option value="USDT (TRC20)">USDT (TRC20)</option>
                 <option value="MTN Mobile Money">MTN Mobile Money</option>
                 <option value="Vodafone Cash">Vodafone Cash</option>
-                <option value="AirtelTigo Money">AirtelTigo Money</option>
             </select>
             <input type="text" id="withdrawAccount" placeholder="Wallet Address / Phone Number" class="input-field">
             <input type="number" id="withdrawAmount" placeholder="Amount of NEX" class="input-field">
@@ -48,7 +71,21 @@
     </div>
 
     <div class="app-container">
-        <div id="auth-section" class="card auth-card">
+        <!-- LANDING PAGE -->
+        <div id="landing-page" class="card landing-card">
+            <h1 class="landing-logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
+            <p class="landing-tagline">The Future of Web3 Rewards.</p>
+            <p class="landing-desc">Mine, invest, and earn crypto daily. Join our decentralized ecosystem and grow your portfolio with NexCoin.</p>
+            <div class="landing-features">
+                <div class="feature-item"><i class="fa-solid fa-pickaxe"></i> Auto-Mining</div>
+                <div class="feature-item"><i class="fa-solid fa-chart-line"></i> DeFi Yields</div>
+                <div class="feature-item"><i class="fa-solid fa-users"></i> MLM Referrals</div>
+            </div>
+            <button id="launchAppBtn" class="btn btn-primary">Launch App <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <!-- Auth Section -->
+        <div id="auth-section" class="card auth-card" style="display:none;">
             <h1 class="logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
             <p class="subtitle">Next Generation Web3 Reward Ecosystem</p>
             <input type="email" id="email" placeholder="Enter Email" class="input-field">
@@ -56,8 +93,10 @@
             <div class="ref-box"><i class="fa-solid fa-gift"></i> Referral Code: <span id="refDisplay">None</span></div>
             <button id="signupBtn" class="btn btn-primary">Create Account</button>
             <button id="loginBtn" class="btn btn-secondary">Login</button>
+            <button id="backToLandingBtn" class="btn btn-text"><i class="fa-solid fa-arrow-left"></i> Back</button>
         </div>
 
+        <!-- Dashboard Section -->
         <div id="dashboard" class="dashboard-container" style="display: none;">
             <header class="dash-header">
                 <h1 class="logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
@@ -77,7 +116,10 @@
                     <i class="fa-solid fa-wallet overview-icon blue"></i>
                     <h4>Wallet</h4>
                     <p class="overview-value"><span id="walletBalance">0.00</span> NEX</p>
-                    <button id="openWithdrawBtn" class="btn btn-withdraw-small">Withdraw</button>
+                    <div class="wallet-btns">
+                        <button id="openDepositBtn" class="btn btn-withdraw-small green-btn">Deposit</button>
+                        <button id="openWithdrawBtn" class="btn btn-withdraw-small">Withdraw</button>
+                    </div>
                 </div>
                 <div class="card overview-card">
                     <i class="fa-solid fa-pickaxe overview-icon green"></i>
@@ -94,6 +136,13 @@
                     <h4>Investments</h4>
                     <p class="overview-value"><span id="activeInvestmentsCount">0</span> Active</p>
                 </div>
+            </div>
+
+            <!-- DAILY SPIN -->
+            <div class="card spin-card">
+                <h3><i class="fa-solid fa-arrows-spin"></i> Daily Spin & Win</h3>
+                <p class="spin-info">Spin once every 24 hours to win up to 50 NEX!</p>
+                <button id="spinBtn" class="btn btn-spin"><i class="fa-solid fa-dice"></i> Spin Now</button>
             </div>
 
             <div class="card checkin-card">
@@ -129,6 +178,11 @@
                         <i class="fa-solid fa-bolt product-icon yellow"></i><h4>NexCloud</h4><p class="roi">+5% Daily</p>
                         <div class="invest-details"><small>Min: 100 NEX</small> | <small class="profit-text">Profit: ~5 NEX/day</small></div>
                         <button class="btn btn-invest" data-product="NexCloud" data-roi="0.05" data-cost="100">Invest</button>
+                    </div>
+                    <div class="product-card">
+                        <i class="fa-solid fa-rocket product-icon purple"></i><h4>Quantum AI</h4><p class="roi">+10% Daily</p>
+                        <div class="invest-details"><small>Min: 500 NEX</small> | <small class="profit-text">Profit: ~50 NEX/day</small></div>
+                        <button class="btn btn-invest" data-product="QuantumAI" data-roi="0.10" data-cost="500">Invest</button>
                     </div>
                 </div>
             </div>
@@ -175,6 +229,6 @@
         window.firebaseAuth = auth;
         window.firebaseDb = db;
     </script>
-    <script type="module" src="app.js?v=7"></script>
+    <script type="module" src="app.js?v=8"></script>
 </body>
 </html>
