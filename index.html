@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexCoin - DeFi Hub</title>
+    <title>NexCoin - Web3 Ecosystem</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Add Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
     <div class="app-container">
         <!-- Auth Section -->
         <div id="auth-section" class="card auth-card">
             <h1 class="logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
-            <p class="subtitle">Next Generation DeFi & Cloud Mining</p>
+            <p class="subtitle">Next Generation Web3 Reward Ecosystem</p>
             
             <input type="email" id="email" placeholder="Enter Email" class="input-field">
             <input type="password" id="password" placeholder="Enter Password" class="input-field">
@@ -30,76 +32,104 @@
         <div id="dashboard" class="dashboard-container" style="display: none;">
             <header class="dash-header">
                 <h1 class="logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
-                <button id="logoutBtn" class="btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                <button id="logoutBtn" class="btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i></button>
             </header>
 
-            <div class="stats-grid">
-                <div class="card stat-card">
-                    <p class="stat-label"><i class="fa-solid fa-wallet"></i> Available Balance</p>
-                    <h2 class="stat-value"><span id="balance">0.00</span> NEX</h2>
+            <!-- Overview Grid -->
+            <div class="overview-grid">
+                <div class="card overview-card">
+                    <i class="fa-solid fa-wallet overview-icon blue"></i>
+                    <h4>Wallet</h4>
+                    <p class="overview-value"><span id="walletBalance">0.00</span> NEX</p>
                 </div>
-                <div class="card stat-card">
-                    <p class="stat-label"><i class="fa-solid fa-users"></i> Total Referrals</p>
-                    <h2 class="stat-value"><span id="refCount">0</span></h2>
+                <div class="card overview-card">
+                    <i class="fa-solid fa-pickaxe overview-icon green"></i>
+                    <h4>Mining</h4>
+                    <p class="overview-value running">Running</p>
+                </div>
+                <div class="card overview-card">
+                    <i class="fa-solid fa-users overview-icon yellow"></i>
+                    <h4>Referrals</h4>
+                    <p class="overview-value"><span id="friendsInvited">0</span></p>
+                </div>
+                <div class="card overview-card">
+                    <i class="fa-solid fa-chart-line overview-icon purple"></i>
+                    <h4>Investments</h4>
+                    <p class="overview-value"><span id="activeInvestmentsCount">0</span> Active</p>
                 </div>
             </div>
 
-            <div class="card mining-card">
-                <h3><i class="fa-solid fa-pickaxe"></i> Free Mining</h3>
-                <div class="mining-display">
-                    <div class="pending-box">
-                        <p>Pending NEX</p>
-                        <h3><span id="pendingBalance">0.00</span></h3>
-                    </div>
-                    <button id="claimBtn" class="btn btn-success"><i class="fa-solid fa-hand-holding-dollar"></i> Claim</button>
+            <!-- Detailed Wallet -->
+            <div class="card detail-card">
+                <div class="detail-row">
+                    <span><i class="fa-solid fa-hourglass-half"></i> Pending Rewards</span>
+                    <span id="pendingBalance">0.0000 NEX</span>
                 </div>
-                <p class="mining-info">Mining at 0.1 NEX per second.</p>
+                <div class="detail-row">
+                    <span><i class="fa-solid fa-coins"></i> Lifetime Earned</span>
+                    <span id="lifetimeEarned">0.00 NEX</span>
+                </div>
+                <button id="claimBtn" class="btn btn-success" style="margin-top:15px;"><i class="fa-solid fa-hand-holding-dollar"></i> Claim to Wallet</button>
             </div>
 
-            <!-- INVESTMENT HUB -->
+            <!-- Investment Hub -->
             <div class="card investment-hub">
                 <h3><i class="fa-solid fa-chart-line"></i> Investment Products</h3>
-                <p class="hub-subtitle">Invest your NEX to earn daily ROI.</p>
-                
                 <div class="product-grid">
-                    <!-- Product 1 -->
                     <div class="product-card">
                         <i class="fa-solid fa-leaf product-icon green"></i>
                         <h4>NexStake</h4>
                         <p class="roi">+2% Daily</p>
-                        <button class="btn btn-invest" data-product="NexStake" data-roi="0.02" data-cost="50">Invest 50 NEX</button>
+                        <div class="invest-details">
+                            <small>Min Investment: 50 NEX</small><br>
+                            <small class="profit-text">Daily Profit: ~1 NEX</small>
+                        </div>
+                        <button class="btn btn-invest" data-product="NexStake" data-roi="0.02" data-cost="50">Invest Now</button>
                     </div>
-                    
-                    <!-- Product 2 -->
                     <div class="product-card">
                         <i class="fa-solid fa-bolt product-icon yellow"></i>
                         <h4>NexCloud</h4>
                         <p class="roi">+5% Daily</p>
-                        <button class="btn btn-invest" data-product="NexCloud" data-roi="0.05" data-cost="100">Invest 100 NEX</button>
+                        <div class="invest-details">
+                            <small>Min Investment: 100 NEX</small><br>
+                            <small class="profit-text">Daily Profit: ~5 NEX</small>
+                        </div>
+                        <button class="btn btn-invest" data-product="NexCloud" data-roi="0.05" data-cost="100">Invest Now</button>
                     </div>
-                    
-                    <!-- Product 3 -->
                     <div class="product-card">
                         <i class="fa-solid fa-rocket product-icon blue"></i>
                         <h4>Quantum AI</h4>
                         <p class="roi">+10% Daily</p>
-                        <button class="btn btn-invest" data-product="QuantumAI" data-roi="0.10" data-cost="500">Invest 500 NEX</button>
+                        <div class="invest-details">
+                            <small>Min Investment: 500 NEX</small><br>
+                            <small class="profit-text">Daily Profit: ~50 NEX</small>
+                        </div>
+                        <button class="btn btn-invest" data-product="QuantumAI" data-roi="0.10" data-cost="500">Invest Now</button>
                     </div>
                 </div>
             </div>
 
-            <!-- ACTIVE INVESTMENTS -->
+            <!-- Active Investments -->
             <div class="card active-investments">
-                <h3><i class="fa-solid fa-coins"></i> Your Investments</h3>
-                <div id="investmentsList">
-                    <p class="empty-text">No active investments. Buy one above!</p>
-                </div>
+                <h3><i class="fa-solid fa-coins"></i> Your Portfolio</h3>
+                <div id="investmentsList"><p class="empty-text">No active investments.</p></div>
             </div>
 
+            <!-- Referral Hub -->
             <div class="card referral-card">
-                <h3><i class="fa-solid fa-share-nodes"></i> Invite Friends</h3>
-                <p>Earn 10 NEX for every friend who signs up!</p>
-                <input type="text" id="refLink" readonly class="input-field">
+                <h3><i class="fa-solid fa-share-nodes"></i> Referral Program</h3>
+                <div class="detail-row">
+                    <span>Friends Invited</span>
+                    <span id="refCountDetail">0</span>
+                </div>
+                <div class="detail-row">
+                    <span>Referral Earnings</span>
+                    <span id="referralEarnings">0.00 NEX</span>
+                </div>
+                <div class="copy-link-container">
+                    <input type="text" id="refLink" readonly class="input-field">
+                    <button id="copyBtn" class="btn btn-copy"><i class="fa-solid fa-copy"></i></button>
+                </div>
             </div>
         </div>
     </div>
@@ -128,6 +158,6 @@
         window.firebaseAuth = auth;
         window.firebaseDb = db;
     </script>
-    <script type="module" src="app.js?v=3"></script>
+    <script type="module" src="app.js?v=4"></script>
 </body>
 </html>
