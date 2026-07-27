@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexCoin - Login</title>
+    <title>NexCoin - Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,12 +19,16 @@
             <button id="loginBtn">Login</button>
         </div>
 
-        <!-- Dashboard Section (Hidden until login) -->
+        <!-- Dashboard Section -->
         <div id="dashboard" style="display: none;">
             <h2>Dashboard</h2>
             <p>Your Balance: <span id="balance">0</span> NEX</p>
+            
+            <button id="mineBtn" class="mine-btn">⛏️ Mine +1 NEX</button>
+            
             <p>Your Referral Link:</p>
             <input type="text" id="refLink" readonly>
+            <p>Total Referrals: <span id="refCount">0</span></p>
             <button id="logoutBtn">Logout</button>
         </div>
     </div>
@@ -35,7 +39,6 @@
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // YOUR FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCkJdxeqUbOclin_dd_9mp-J7Uvf-xFQZg",
             authDomain: "nexcoin-d8747.firebaseapp.com",
@@ -47,16 +50,13 @@
             measurementId: "G-WFJRG8LPX5"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // Export to window so app.js can use them
         window.firebaseAuth = auth;
         window.firebaseDb = db;
     </script>
-    <!-- Load app.js as a module -->
     <script type="module" src="app.js"></script>
 </body>
 </html>
