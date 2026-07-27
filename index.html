@@ -3,33 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexCoin - Dashboard</title>
+    <title>NexCoin - Cloud Mining</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h2 id="formTitle">NexCoin</h2>
-        
+    <div class="app-container">
         <!-- Auth Section -->
-        <div id="auth-section">
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Password">
-            <p>Referral Code: <span id="refDisplay">None</span></p>
-            <button id="signupBtn">Sign Up</button>
-            <button id="loginBtn">Login</button>
+        <div id="auth-section" class="card auth-card">
+            <h1 class="logo">NexCoin</h1>
+            <p class="subtitle">Next Generation Cloud Mining</p>
+            
+            <input type="email" id="email" placeholder="Enter Email" class="input-field">
+            <input type="password" id="password" placeholder="Enter Password" class="input-field">
+            
+            <div class="ref-box">
+                Referral Code: <span id="refDisplay">None</span>
+            </div>
+            
+            <button id="signupBtn" class="btn btn-primary">Create Account</button>
+            <button id="loginBtn" class="btn btn-secondary">Login</button>
         </div>
 
         <!-- Dashboard Section -->
-        <div id="dashboard" style="display: none;">
-            <h2>Dashboard</h2>
-            <p>Your Balance: <span id="balance">0</span> NEX</p>
-            
-            <button id="mineBtn" class="mine-btn">⛏️ Mine +1 NEX</button>
-            
-            <p>Your Referral Link:</p>
-            <input type="text" id="refLink" readonly>
-            <p>Total Referrals: <span id="refCount">0</span></p>
-            <button id="logoutBtn">Logout</button>
+        <div id="dashboard" class="dashboard-container" style="display: none;">
+            <header class="dash-header">
+                <h1 class="logo">NexCoin</h1>
+                <button id="logoutBtn" class="btn btn-logout">Logout</button>
+            </header>
+
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <p class="stat-label">Available Balance</p>
+                    <h2 class="stat-value"><span id="balance">0</span> NEX</h2>
+                </div>
+                <div class="card stat-card">
+                    <p class="stat-label">Total Referrals</p>
+                    <h2 class="stat-value"><span id="refCount">0</span></h2>
+                </div>
+            </div>
+
+            <div class="card mining-card">
+                <h3>⛏️ Active Mining</h3>
+                <div class="mining-display">
+                    <div class="pending-box">
+                        <p>Pending NEX</p>
+                        <h3><span id="pendingBalance">0.00</span></h3>
+                    </div>
+                    <button id="claimBtn" class="btn btn-success">Claim to Balance</button>
+                </div>
+                <p class="mining-info">Mining at 0.1 NEX per second. Click claim to move to main balance.</p>
+            </div>
+
+            <div class="card referral-card">
+                <h3>🚀 Invite Friends</h3>
+                <p>Earn 10 NEX for every friend who signs up with your link!</p>
+                <input type="text" id="refLink" readonly class="input-field">
+            </div>
         </div>
     </div>
 
