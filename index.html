@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexCoin - Cloud Mining</title>
+    <title>NexCoin - DeFi Hub</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <div class="app-container">
         <!-- Auth Section -->
         <div id="auth-section" class="card auth-card">
-            <h1 class="logo">NexCoin</h1>
-            <p class="subtitle">Next Generation Cloud Mining</p>
+            <h1 class="logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
+            <p class="subtitle">Next Generation DeFi & Cloud Mining</p>
             
             <input type="email" id="email" placeholder="Enter Email" class="input-field">
             <input type="password" id="password" placeholder="Enter Password" class="input-field">
             
             <div class="ref-box">
-                Referral Code: <span id="refDisplay">None</span>
+                <i class="fa-solid fa-gift"></i> Referral Code: <span id="refDisplay">None</span>
             </div>
             
             <button id="signupBtn" class="btn btn-primary">Create Account</button>
@@ -27,36 +29,76 @@
         <!-- Dashboard Section -->
         <div id="dashboard" class="dashboard-container" style="display: none;">
             <header class="dash-header">
-                <h1 class="logo">NexCoin</h1>
-                <button id="logoutBtn" class="btn btn-logout">Logout</button>
+                <h1 class="logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
+                <button id="logoutBtn" class="btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
             </header>
 
             <div class="stats-grid">
                 <div class="card stat-card">
-                    <p class="stat-label">Available Balance</p>
-                    <h2 class="stat-value"><span id="balance">0</span> NEX</h2>
+                    <p class="stat-label"><i class="fa-solid fa-wallet"></i> Available Balance</p>
+                    <h2 class="stat-value"><span id="balance">0.00</span> NEX</h2>
                 </div>
                 <div class="card stat-card">
-                    <p class="stat-label">Total Referrals</p>
+                    <p class="stat-label"><i class="fa-solid fa-users"></i> Total Referrals</p>
                     <h2 class="stat-value"><span id="refCount">0</span></h2>
                 </div>
             </div>
 
             <div class="card mining-card">
-                <h3>⛏️ Active Mining</h3>
+                <h3><i class="fa-solid fa-pickaxe"></i> Free Mining</h3>
                 <div class="mining-display">
                     <div class="pending-box">
                         <p>Pending NEX</p>
                         <h3><span id="pendingBalance">0.00</span></h3>
                     </div>
-                    <button id="claimBtn" class="btn btn-success">Claim to Balance</button>
+                    <button id="claimBtn" class="btn btn-success"><i class="fa-solid fa-hand-holding-dollar"></i> Claim</button>
                 </div>
-                <p class="mining-info">Mining at 0.1 NEX per second. Click claim to move to main balance.</p>
+                <p class="mining-info">Mining at 0.1 NEX per second.</p>
+            </div>
+
+            <!-- INVESTMENT HUB -->
+            <div class="card investment-hub">
+                <h3><i class="fa-solid fa-chart-line"></i> Investment Products</h3>
+                <p class="hub-subtitle">Invest your NEX to earn daily ROI.</p>
+                
+                <div class="product-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card">
+                        <i class="fa-solid fa-leaf product-icon green"></i>
+                        <h4>NexStake</h4>
+                        <p class="roi">+2% Daily</p>
+                        <button class="btn btn-invest" data-product="NexStake" data-roi="0.02" data-cost="50">Invest 50 NEX</button>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <i class="fa-solid fa-bolt product-icon yellow"></i>
+                        <h4>NexCloud</h4>
+                        <p class="roi">+5% Daily</p>
+                        <button class="btn btn-invest" data-product="NexCloud" data-roi="0.05" data-cost="100">Invest 100 NEX</button>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="product-card">
+                        <i class="fa-solid fa-rocket product-icon blue"></i>
+                        <h4>Quantum AI</h4>
+                        <p class="roi">+10% Daily</p>
+                        <button class="btn btn-invest" data-product="QuantumAI" data-roi="0.10" data-cost="500">Invest 500 NEX</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTIVE INVESTMENTS -->
+            <div class="card active-investments">
+                <h3><i class="fa-solid fa-coins"></i> Your Investments</h3>
+                <div id="investmentsList">
+                    <p class="empty-text">No active investments. Buy one above!</p>
+                </div>
             </div>
 
             <div class="card referral-card">
-                <h3>🚀 Invite Friends</h3>
-                <p>Earn 10 NEX for every friend who signs up with your link!</p>
+                <h3><i class="fa-solid fa-share-nodes"></i> Invite Friends</h3>
+                <p>Earn 10 NEX for every friend who signs up!</p>
                 <input type="text" id="refLink" readonly class="input-field">
             </div>
         </div>
@@ -86,7 +128,6 @@
         window.firebaseAuth = auth;
         window.firebaseDb = db;
     </script>
-    <!-- Notice the ?v=2 below. This stops the browser from using old cached code -->
-    <script type="module" src="app.js?v=2"></script>
+    <script type="module" src="app.js?v=3"></script>
 </body>
 </html>
