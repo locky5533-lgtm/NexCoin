@@ -8,8 +8,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <!-- Toast Notification Container -->
     <div id="toast-container"></div>
+
+    <!-- Withdrawal Modal -->
+    <div id="withdrawModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3><i class="fa-solid fa-money-bill-transfer"></i> Withdraw Funds</h3>
+            <p>Minimum withdrawal: 100 NEX</p>
+            <select id="withdrawMethod" class="input-field">
+                <option value="USDT (TRC20)">USDT (TRC20)</option>
+                <option value="MTN Mobile Money">MTN Mobile Money</option>
+                <option value="Vodafone Cash">Vodafone Cash</option>
+                <option value="AirtelTigo Money">AirtelTigo Money</option>
+            </select>
+            <input type="text" id="withdrawAccount" placeholder="Wallet Address / Phone Number" class="input-field">
+            <input type="number" id="withdrawAmount" placeholder="Amount of NEX" class="input-field">
+            <button id="submitWithdraw" class="btn btn-primary">Request Withdrawal</button>
+        </div>
+    </div>
 
     <div class="app-container">
         <!-- Auth Section -->
@@ -41,6 +58,7 @@
                     <i class="fa-solid fa-wallet overview-icon blue"></i>
                     <h4>Wallet</h4>
                     <p class="overview-value"><span id="walletBalance">0.00</span> NEX</p>
+                    <button id="openWithdrawBtn" class="btn btn-withdraw-small">Withdraw</button>
                 </div>
                 <div class="card overview-card">
                     <i class="fa-solid fa-pickaxe overview-icon green"></i>
@@ -56,6 +74,36 @@
                     <i class="fa-solid fa-chart-line overview-icon purple"></i>
                     <h4>Investments</h4>
                     <p class="overview-value"><span id="activeInvestmentsCount">0</span> Active</p>
+                </div>
+            </div>
+
+            <!-- Daily Check-in -->
+            <div class="card checkin-card">
+                <h3><i class="fa-solid fa-calendar-check"></i> Daily Check-in</h3>
+                <div class="checkin-info">
+                    <div>
+                        <p class="checkin-label">Current Streak</p>
+                        <p class="checkin-value">Day <span id="streakCount">0</span></p>
+                    </div>
+                    <button id="checkinBtn" class="btn btn-success">Check In!</button>
+                </div>
+                <p class="checkin-hint">Earn 2 NEX today, up to 14 NEX on Day 7!</p>
+            </div>
+
+            <!-- Tasks -->
+            <div class="card tasks-card">
+                <h3><i class="fa-solid fa-list-check"></i> Bonus Tasks</h3>
+                <div class="task-item">
+                    <span><i class="fa-brands fa-telegram"></i> Join Telegram Channel</span>
+                    <button class="btn-task" data-task="telegram" data-reward="5">+5 NEX</button>
+                </div>
+                <div class="task-item">
+                    <span><i class="fa-brands fa-twitter"></i> Follow on Twitter</span>
+                    <button class="btn-task" data-task="twitter" data-reward="5">+5 NEX</button>
+                </div>
+                <div class="task-item">
+                    <span><i class="fa-solid fa-video"></i> Watch Sponsor Video</span>
+                    <button class="btn-task" data-task="video" data-reward="10">+10 NEX</button>
                 </div>
             </div>
 
@@ -81,30 +129,18 @@
                         <h4>NexStake</h4>
                         <p class="roi">+2% Daily</p>
                         <div class="invest-details">
-                            <small>Min Investment: 50 NEX</small><br>
-                            <small class="profit-text">Daily Profit: ~1 NEX</small>
+                            <small>Min: 50 NEX</small> | <small class="profit-text">Profit: ~1 NEX/day</small>
                         </div>
-                        <button class="btn btn-invest" data-product="NexStake" data-roi="0.02" data-cost="50">Invest Now</button>
+                        <button class="btn btn-invest" data-product="NexStake" data-roi="0.02" data-cost="50">Invest</button>
                     </div>
                     <div class="product-card">
                         <i class="fa-solid fa-bolt product-icon yellow"></i>
                         <h4>NexCloud</h4>
                         <p class="roi">+5% Daily</p>
                         <div class="invest-details">
-                            <small>Min Investment: 100 NEX</small><br>
-                            <small class="profit-text">Daily Profit: ~5 NEX</small>
+                            <small>Min: 100 NEX</small> | <small class="profit-text">Profit: ~5 NEX/day</small>
                         </div>
-                        <button class="btn btn-invest" data-product="NexCloud" data-roi="0.05" data-cost="100">Invest Now</button>
-                    </div>
-                    <div class="product-card">
-                        <i class="fa-solid fa-rocket product-icon blue"></i>
-                        <h4>Quantum AI</h4>
-                        <p class="roi">+10% Daily</p>
-                        <div class="invest-details">
-                            <small>Min Investment: 500 NEX</small><br>
-                            <small class="profit-text">Daily Profit: ~50 NEX</small>
-                        </div>
-                        <button class="btn btn-invest" data-product="QuantumAI" data-roi="0.10" data-cost="500">Invest Now</button>
+                        <button class="btn btn-invest" data-product="NexCloud" data-roi="0.05" data-cost="100">Invest</button>
                     </div>
                 </div>
             </div>
@@ -158,6 +194,6 @@
         window.firebaseAuth = auth;
         window.firebaseDb = db;
     </script>
-    <script type="module" src="app.js?v=4"></script>
+    <script type="module" src="app.js?v=5"></script>
 </body>
 </html>
