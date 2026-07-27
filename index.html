@@ -10,6 +10,27 @@
 <body>
     <div id="toast-container"></div>
 
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" id="closeProfileModal">&times;</span>
+            <h3><i class="fa-solid fa-user-gear"></i> Edit Profile</h3>
+            <p>Set your username for the leaderboard.</p>
+            <input type="text" id="usernameInput" placeholder="Enter Username" class="input-field">
+            <select id="countryInput" class="input-field">
+                <option value="🌍 Global">Select Region</option>
+                <option value="🇬🇭 Ghana">🇬🇭 Ghana</option>
+                <option value="🇳🇬 Nigeria">🇳🇬 Nigeria</option>
+                <option value="🇰🇪 Kenya">🇰🇪 Kenya</option>
+                <option value="🇺🇸 USA">🇺🇸 USA</option>
+                <option value="🇬🇧 UK">🇬🇧 UK</option>
+                <option value="🇮🇳 India">🇮🇳 India</option>
+                <option value="🌍 Other">🌍 Other</option>
+            </select>
+            <button id="saveProfileBtn" class="btn btn-primary">Save Profile</button>
+        </div>
+    </div>
+
     <!-- Withdrawal Modal -->
     <div id="withdrawModal" class="modal" style="display:none;">
         <div class="modal-content">
@@ -49,10 +70,18 @@
         <div id="dashboard" class="dashboard-container" style="display: none;">
             <header class="dash-header">
                 <h1 class="logo"><i class="fa-solid fa-cube"></i> NexCoin</h1>
-                <button id="logoutBtn" class="btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <div class="header-buttons">
+                    <button id="openProfileBtn" class="btn btn-header"><i class="fa-solid fa-user"></i></button>
+                    <button id="logoutBtn" class="btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
             </header>
 
-            <!-- Overview Grid -->
+            <!-- Leaderboard -->
+            <div class="card leaderboard-card">
+                <h3><i class="fa-solid fa-trophy"></i> Top Earners</h3>
+                <div id="leaderboardList"></div>
+            </div>
+
             <div class="overview-grid">
                 <div class="card overview-card">
                     <i class="fa-solid fa-wallet overview-icon blue"></i>
@@ -77,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- Daily Check-in -->
             <div class="card checkin-card">
                 <h3><i class="fa-solid fa-calendar-check"></i> Daily Check-in</h3>
                 <div class="checkin-info">
@@ -87,81 +115,49 @@
                     </div>
                     <button id="checkinBtn" class="btn btn-success">Check In!</button>
                 </div>
-                <p class="checkin-hint">Earn 2 NEX today, up to 14 NEX on Day 7!</p>
             </div>
 
-            <!-- Tasks -->
             <div class="card tasks-card">
                 <h3><i class="fa-solid fa-list-check"></i> Bonus Tasks</h3>
-                <div class="task-item">
-                    <span><i class="fa-brands fa-telegram"></i> Join Telegram Channel</span>
-                    <button class="btn-task" data-task="telegram" data-reward="5">+5 NEX</button>
-                </div>
-                <div class="task-item">
-                    <span><i class="fa-brands fa-twitter"></i> Follow on Twitter</span>
-                    <button class="btn-task" data-task="twitter" data-reward="5">+5 NEX</button>
-                </div>
-                <div class="task-item">
-                    <span><i class="fa-solid fa-video"></i> Watch Sponsor Video</span>
-                    <button class="btn-task" data-task="video" data-reward="10">+10 NEX</button>
-                </div>
+                <div class="task-item"><span><i class="fa-brands fa-telegram"></i> Join Telegram</span> <button class="btn-task" data-task="telegram" data-reward="5">+5 NEX</button></div>
+                <div class="task-item"><span><i class="fa-brands fa-twitter"></i> Follow on Twitter</span> <button class="btn-task" data-task="twitter" data-reward="5">+5 NEX</button></div>
+                <div class="task-item"><span><i class="fa-solid fa-video"></i> Watch Sponsor Video</span> <button class="btn-task" data-task="video" data-reward="10">+10 NEX</button></div>
             </div>
 
-            <!-- Detailed Wallet -->
             <div class="card detail-card">
-                <div class="detail-row">
-                    <span><i class="fa-solid fa-hourglass-half"></i> Pending Rewards</span>
-                    <span id="pendingBalance">0.0000 NEX</span>
-                </div>
-                <div class="detail-row">
-                    <span><i class="fa-solid fa-coins"></i> Lifetime Earned</span>
-                    <span id="lifetimeEarned">0.00 NEX</span>
-                </div>
+                <div class="detail-row"><span><i class="fa-solid fa-hourglass-half"></i> Pending Rewards</span> <span id="pendingBalance">0.0000 NEX</span></div>
+                <div class="detail-row"><span><i class="fa-solid fa-coins"></i> Lifetime Earned</span> <span id="lifetimeEarned">0.00 NEX</span></div>
                 <button id="claimBtn" class="btn btn-success" style="margin-top:15px;"><i class="fa-solid fa-hand-holding-dollar"></i> Claim to Wallet</button>
             </div>
 
-            <!-- Investment Hub -->
             <div class="card investment-hub">
                 <h3><i class="fa-solid fa-chart-line"></i> Investment Products</h3>
                 <div class="product-grid">
                     <div class="product-card">
                         <i class="fa-solid fa-leaf product-icon green"></i>
-                        <h4>NexStake</h4>
-                        <p class="roi">+2% Daily</p>
-                        <div class="invest-details">
-                            <small>Min: 50 NEX</small> | <small class="profit-text">Profit: ~1 NEX/day</small>
-                        </div>
+                        <h4>NexStake</h4><p class="roi">+2% Daily</p>
+                        <div class="invest-details"><small>Min: 50 NEX</small> | <small class="profit-text">Profit: ~1 NEX/day</small></div>
                         <button class="btn btn-invest" data-product="NexStake" data-roi="0.02" data-cost="50">Invest</button>
                     </div>
                     <div class="product-card">
                         <i class="fa-solid fa-bolt product-icon yellow"></i>
-                        <h4>NexCloud</h4>
-                        <p class="roi">+5% Daily</p>
-                        <div class="invest-details">
-                            <small>Min: 100 NEX</small> | <small class="profit-text">Profit: ~5 NEX/day</small>
-                        </div>
+                        <h4>NexCloud</h4><p class="roi">+5% Daily</p>
+                        <div class="invest-details"><small>Min: 100 NEX</small> | <small class="profit-text">Profit: ~5 NEX/day</small></div>
                         <button class="btn btn-invest" data-product="NexCloud" data-roi="0.05" data-cost="100">Invest</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Active Investments -->
             <div class="card active-investments">
                 <h3><i class="fa-solid fa-coins"></i> Your Portfolio</h3>
                 <div id="investmentsList"><p class="empty-text">No active investments.</p></div>
             </div>
 
-            <!-- Referral Hub -->
             <div class="card referral-card">
                 <h3><i class="fa-solid fa-share-nodes"></i> Referral Program</h3>
-                <div class="detail-row">
-                    <span>Friends Invited</span>
-                    <span id="refCountDetail">0</span>
-                </div>
-                <div class="detail-row">
-                    <span>Referral Earnings</span>
-                    <span id="referralEarnings">0.00 NEX</span>
-                </div>
+                <p class="mlm-info">L1: 10 NEX | L2: 3 NEX | L3: 1 NEX</p>
+                <div class="detail-row"><span>Friends Invited</span> <span id="refCountDetail">0</span></div>
+                <div class="detail-row"><span>Referral Earnings</span> <span id="referralEarnings">0.00 NEX</span></div>
                 <div class="copy-link-container">
                     <input type="text" id="refLink" readonly class="input-field">
                     <button id="copyBtn" class="btn btn-copy"><i class="fa-solid fa-copy"></i></button>
@@ -170,7 +166,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -194,6 +189,6 @@
         window.firebaseAuth = auth;
         window.firebaseDb = db;
     </script>
-    <script type="module" src="app.js?v=5"></script>
+    <script type="module" src="app.js?v=6"></script>
 </body>
 </html>
