@@ -30,7 +30,6 @@ window.addEventListener('load', () => {
             const newRefCode = user.uid.substring(0, 6).toUpperCase();
 
             // Create user document in Realtime Database
-            // Path: users -> user.uid -> { data }
             await set(ref(db, 'users/' + user.uid), {
                 email: user.email,
                 balance: 0, // Start with 0 balance
@@ -80,6 +79,8 @@ window.addEventListener('load', () => {
                 // Set their personal referral link
                 const refLink = `https://locky5533-lgtm.github.io/NexCoin/?inviteCode=${userData.myRefCode}`;
                 document.getElementById('refLink').value = refLink;
+            } else {
+                console.log("No user data found in database yet.");
             }
         } else {
             // User is logged out
