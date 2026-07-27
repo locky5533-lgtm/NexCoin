@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { ref, set, get, update, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, set, get, update, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 window.addEventListener('load', () => {
     const auth = window.firebaseAuth;
@@ -92,13 +92,17 @@ window.addEventListener('load', () => {
         
         if (snapshot.exists()) {
             const currentBalance = snapshot.val().balance || 0;
-            const totalToAdd = currentBalance + Math.floor(pendingNex); // Only add whole numbers
+            const totalToAdd = currentBalance + Math.floor(pendingNex); // Add whole numbers only
             
+            // Update Firebase
             await update(userRef, { balance: totalToAdd });
             
-            pendingNex = 0; // Reset pending
+            // Reset pending UI
+            pendingNex = 0; 
             document.getElementById('pendingBalance').innerText = "0.00";
-            document.getElementById('balance').innerText = totalBalance; // Update UI
+            
+            // Fix: Instantly update the balance text on the screen
+            document.getElementById('balance').innerText = totalToAdd; 
         }
     });
 
@@ -109,36 +113,40 @@ window.addEventListener('load', () => {
             document.getElementById('dashboard').style.display = 'block';
 
             const userRef = ref(db, 'users/' + user.uid);
-            const snapshot = await get(userRef);
             
-            if (snapshot.exists()) {
-                const userData = snapshot.val();
-                document.getElementById('balance').innerText = userData.balance || 0;
-                
-                const refLink = `https://locky5533-lgtm.github.io/NexCoin/?inviteCode=${userData.myRefCode}`;
-                document.getElementById('refLink').value = refLink;
+            // FIX: Use onValue instead of get! 
+            // This listens to the database in real-time. If the balance changes in Firebase, it updates the screen instantly!
+            onValue(userRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    document.getElementById('balance').innerText = userData.balance || 0;
+                    
+                    const refLink = `https://locky5533-lgtm.github.io/NexCoin/?inviteCode=${userData.myRefCode}`;
+                    document.getElementById('refLink').value = refLink;
+                }
+            });
 
-                // Count Referrals
-                const allUsersRef = ref(db, 'users');
-                const allUsersSnapshot = await get(allUsersRef);
-                let refCount = 0;
-                if (allUsersSnapshot.exists()) {
-                    const users = allUsersSnapshot.val();
-                    for (let uid in users) {
-                        if (users[uid].referredBy === userData.myRefCode) {
-                            refCount++;
-                        }
+            // Count Referrals (Still using get because we only need this once on login)
+            const allUsersRef = ref(db, 'users');
+            const allUsersSnapshot = await get(allUsersRef);
+            let refCount = 0;
+            if (allUsersSnapshot.exists()) {
+                const users = allUsersSnapshot.val();
+                for (let uid in users) {
+                    if (users[uid].referredBy === user.uid.substring(0, 6).toUpperCase()) {
+                        refCount++;
                     }
                 }
-                document.getElementById('refCount').innerText = refCount;
-
-                // Start Live Mining Simulation
-                if (miningInterval) clearInterval(miningInterval);
-                miningInterval = setInterval(() => {
-                    pendingNex += 0.1; // Mine 0.1 NEX per second
-                    document.getElementById('pendingBalance').innerText = pendingNex.toFixed(2);
-                }, 1000);
             }
+            document.getElementById('refCount').innerText = refCount;
+
+            // Start Live Mining Simulation
+            if (miningInterval) clearInterval(miningInterval);
+            miningInterval = setInterval(() => {
+                pendingNex += 0.1; // Mine 0.1 NEX per second
+                document.getElementById('pendingBalance').innerText = pendingNex.toFixed(2);
+            }, 1000);
+
         } else {
             document.getElementById('auth-section').style.display = 'block';
             document.getElementById('dashboard').style.display = 'none';
