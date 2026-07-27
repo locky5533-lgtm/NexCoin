@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoMine - Login</title>
+    <title>NexCoin - Login</title>
     <link rel="stylesheet" href="style.css">
-    <script type="module" src="app.js"></script>
 </head>
 <body>
     <div class="container">
-        <h2 id="formTitle">Sign Up / Login</h2>
+        <h2 id="formTitle">NexCoin</h2>
         
         <!-- Auth Section -->
         <div id="auth-section">
@@ -23,8 +22,9 @@
         <!-- Dashboard Section (Hidden until login) -->
         <div id="dashboard" style="display: none;">
             <h2>Dashboard</h2>
-            <p>Your Balance: <span id="balance">0</span> MINE</p>
-            <p>Your Referral Link: <input type="text" id="refLink" readonly></p>
+            <p>Your Balance: <span id="balance">0</span> NEX</p>
+            <p>Your Referral Link:</p>
+            <input type="text" id="refLink" readonly>
             <button id="logoutBtn">Logout</button>
         </div>
     </div>
@@ -33,26 +33,30 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // PASTE YOUR FIREBASE CONFIG HERE
+        // YOUR FIREBASE CONFIG
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyCkJdxeqUbOclin_dd_9mp-J7Uvf-xFQZg",
+            authDomain: "nexcoin-d8747.firebaseapp.com",
+            databaseURL: "https://nexcoin-d8747-default-rtdb.firebaseio.com",
+            projectId: "nexcoin-d8747",
+            storageBucket: "nexcoin-d8747.firebasestorage.app",
+            messagingSenderId: "326445464976",
+            appId: "1:326445464976:web:095ee241d952317ac78715",
+            measurementId: "G-WFJRG8LPX5"
         };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        const db = getDatabase(app);
 
         // Export to window so app.js can use them
         window.firebaseAuth = auth;
         window.firebaseDb = db;
     </script>
+    <!-- Load app.js as a module -->
+    <script type="module" src="app.js"></script>
 </body>
 </html>
