@@ -20,7 +20,6 @@ window.addEventListener('load', () => {
             const user = userCredential.user;
             const newRefCode = user.uid.substring(0, 6).toUpperCase();
 
-            // Save new user to DB
             await set(ref(db, 'users/' + user.uid), {
                 email: user.email,
                 balance: 0,
@@ -29,7 +28,6 @@ window.addEventListener('load', () => {
                 createdAt: new Date().toISOString()
             });
 
-            // Referral Bonus Logic
             if (inviteCode !== "None") {
                 const dbRef = ref(db);
                 const snapshot = await get(child(dbRef, `users`));
@@ -91,8 +89,11 @@ window.addEventListener('load', () => {
         const snapshot = await get(userRef);
         
         if (snapshot.exists()) {
-            const currentBalance = snapshot.val().balance || 0;
-            const totalToAdd = currentBalance + Math.floor(pendingNex); // Add whole numbers only
+            // Get current balance and make sure it's a number
+            let currentBalance = parseFloat(snapshot.val().balance) || 0;
+            
+            // Add the EXACT pending amount (with 2 decimals)
+            let totalToAdd = currentBalance + parseFloat(pendingNex.toFixed(2));
             
             // Update Firebase
             await update(userRef, { balance: totalToAdd });
@@ -101,8 +102,8 @@ window.addEventListener('load', () => {
             pendingNex = 0; 
             document.getElementById('pendingBalance').innerText = "0.00";
             
-            // Fix: Instantly update the balance text on the screen
-            document.getElementById('balance').innerText = totalToAdd; 
+            // Instantly update the balance text on the screen
+            document.getElementById('balance').innerText = totalToAdd.toFixed(2); 
         }
     });
 
@@ -114,19 +115,20 @@ window.addEventListener('load', () => {
 
             const userRef = ref(db, 'users/' + user.uid);
             
-            // FIX: Use onValue instead of get! 
-            // This listens to the database in real-time. If the balance changes in Firebase, it updates the screen instantly!
+            // Real-time listener for balance
             onValue(userRef, (snapshot) => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
-                    document.getElementById('balance').innerText = userData.balance || 0;
+                    // Format balance to 2 decimal places
+                    let bal = parseFloat(userData.balance || 0).toFixed(2);
+                    document.getElementById('balance').innerText = bal;
                     
                     const refLink = `https://locky5533-lgtm.github.io/NexCoin/?inviteCode=${userData.myRefCode}`;
                     document.getElementById('refLink').value = refLink;
                 }
             });
 
-            // Count Referrals (Still using get because we only need this once on login)
+            // Count Referrals
             const allUsersRef = ref(db, 'users');
             const allUsersSnapshot = await get(allUsersRef);
             let refCount = 0;
@@ -143,14 +145,14 @@ window.addEventListener('load', () => {
             // Start Live Mining Simulation
             if (miningInterval) clearInterval(miningInterval);
             miningInterval = setInterval(() => {
-                pendingNex += 0.1; // Mine 0.1 NEX per second
+                pendingNex += 0.1;
                 document.getElementById('pendingBalance').innerText = pendingNex.toFixed(2);
             }, 1000);
 
         } else {
             document.getElementById('auth-section').style.display = 'block';
             document.getElementById('dashboard').style.display = 'none';
-            if (miningInterval) clearInterval(miningInterval); // Stop mining when logged out
+            if (miningInterval) clearInterval(miningInterval);
         }
     });
 });
