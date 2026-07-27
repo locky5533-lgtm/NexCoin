@@ -29,9 +29,8 @@ window.addEventListener('load', () => {
                 createdAt: new Date().toISOString()
             });
 
-            // --- REFERRAL BONUS LOGIC ---
+            // Referral Bonus Logic
             if (inviteCode !== "None") {
-                // Find the person who invited them
                 const dbRef = ref(db);
                 const snapshot = await get(child(dbRef, `users`));
                 
@@ -39,7 +38,6 @@ window.addEventListener('load', () => {
                     const users = snapshot.val();
                     let referrerId = null;
                     
-                    // Search for the user who owns this inviteCode
                     for (let uid in users) {
                         if (users[uid].myRefCode === inviteCode) {
                             referrerId = uid;
@@ -47,7 +45,6 @@ window.addEventListener('load', () => {
                         }
                     }
 
-                    // If found, give them 10 NEX
                     if (referrerId) {
                         const referrerBalance = users[referrerId].balance || 0;
                         await update(ref(db, 'users/' + referrerId), {
@@ -55,7 +52,7 @@ window.addEventListener('load', () => {
                         });
                         alert("Sign up successful! Your referrer got 10 NEX.");
                     } else {
-                        alert("Sign up successful! (Invalid referral code)");
+                        alert("Sign up successful!");
                     }
                 }
             } else {
@@ -82,20 +79,26 @@ window.addEventListener('load', () => {
         signOut(auth);
     });
 
-    // 5. Mine Button Logic
-    document.getElementById('mineBtn').addEventListener('click', async () => {
+    // 5. Live Mining & Claim Logic
+    let miningInterval;
+    let pendingNex = 0;
+
+    document.getElementById('claimBtn').addEventListener('click', async () => {
         const user = auth.currentUser;
-        if (!user) return;
+        if (!user || pendingNex <= 0) return;
 
         const userRef = ref(db, 'users/' + user.uid);
         const snapshot = await get(userRef);
         
         if (snapshot.exists()) {
             const currentBalance = snapshot.val().balance || 0;
-            // Increase balance by 1
-            await update(userRef, {
-                balance: currentBalance + 1
-            });
+            const totalToAdd = currentBalance + Math.floor(pendingNex); // Only add whole numbers
+            
+            await update(userRef, { balance: totalToAdd });
+            
+            pendingNex = 0; // Reset pending
+            document.getElementById('pendingBalance').innerText = "0.00";
+            document.getElementById('balance').innerText = totalBalance; // Update UI
         }
     });
 
@@ -115,7 +118,7 @@ window.addEventListener('load', () => {
                 const refLink = `https://locky5533-lgtm.github.io/NexCoin/?inviteCode=${userData.myRefCode}`;
                 document.getElementById('refLink').value = refLink;
 
-                // Count how many people used this user's referral code
+                // Count Referrals
                 const allUsersRef = ref(db, 'users');
                 const allUsersSnapshot = await get(allUsersRef);
                 let refCount = 0;
@@ -128,10 +131,18 @@ window.addEventListener('load', () => {
                     }
                 }
                 document.getElementById('refCount').innerText = refCount;
+
+                // Start Live Mining Simulation
+                if (miningInterval) clearInterval(miningInterval);
+                miningInterval = setInterval(() => {
+                    pendingNex += 0.1; // Mine 0.1 NEX per second
+                    document.getElementById('pendingBalance').innerText = pendingNex.toFixed(2);
+                }, 1000);
             }
         } else {
             document.getElementById('auth-section').style.display = 'block';
             document.getElementById('dashboard').style.display = 'none';
+            if (miningInterval) clearInterval(miningInterval); // Stop mining when logged out
         }
     });
 });
