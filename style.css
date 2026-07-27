@@ -9,157 +9,54 @@ body {
     margin: 0; 
     padding: 20px;
 }
-
-.app-container {
-    width: 100%;
-    max-width: 450px;
-}
-
-.card {
-    background: #1e293b;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    padding: 30px;
-    margin-bottom: 20px;
-    border: 1px solid #334155;
-}
-
-.auth-card {
-    text-align: center;
-}
-
-.logo {
-    color: #3b82f6;
-    font-size: 32px;
-    margin: 0 0 10px 0;
-    font-weight: 800;
-    letter-spacing: -1px;
-}
-
-.subtitle {
-    color: #64748b;
-    margin-bottom: 30px;
-    font-size: 14px;
-}
-
-.input-field { 
-    width: 100%; 
-    padding: 15px; 
-    margin: 10px 0; 
-    border: 1px solid #334155; 
-    border-radius: 8px; 
-    background: #0f172a;
-    color: white;
-    box-sizing: border-box;
-    font-size: 14px;
-}
-
-.input-field:focus {
-    outline: none;
-    border-color: #3b82f6;
-}
-
-.ref-box {
-    background: #0f172a;
-    padding: 10px;
-    border-radius: 8px;
-    margin: 15px 0;
-    font-size: 14px;
-    color: #64748b;
-}
-
-.btn { 
-    width: 100%; 
-    padding: 15px; 
-    margin: 8px 0; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    font-weight: 700;
-    font-size: 15px;
-    transition: 0.2s;
-}
-
+.app-container { width: 100%; max-width: 450px; }
+.card { background: #1e293b; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); padding: 30px; margin-bottom: 20px; border: 1px solid #334155; }
+.auth-card { text-align: center; }
+.logo { color: #3b82f6; font-size: 32px; margin: 0 0 10px 0; font-weight: 800; letter-spacing: -1px; }
+.subtitle { color: #64748b; margin-bottom: 30px; font-size: 14px; }
+.input-field { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #334155; border-radius: 8px; background: #0f172a; color: white; box-sizing: border-box; font-size: 14px; }
+.input-field:focus { outline: none; border-color: #3b82f6; }
+.ref-box { background: #0f172a; padding: 10px; border-radius: 8px; margin: 15px 0; font-size: 14px; color: #64748b; }
+.btn { width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 15px; transition: 0.2s; }
 .btn-primary { background: #3b82f6; color: white; }
 .btn-primary:hover { background: #2563eb; }
-
 .btn-secondary { background: transparent; color: #3b82f6; border: 1px solid #3b82f6; }
 .btn-secondary:hover { background: #1e293b; }
-
 .btn-success { background: #10b981; color: white; width: auto; padding: 10px 20px; font-size: 14px;}
 .btn-success:hover { background: #059669; }
-
 .btn-logout { background: #ef4444; color: white; width: auto; padding: 8px 16px; font-size: 14px; margin: 0; }
 .btn-logout:hover { background: #dc2626; }
 
-/* Dashboard */
-.dash-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
+.dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.dash-header .logo { font-size: 24px; margin: 0; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+.stat-card { padding: 20px; margin: 0; }
+.stat-label { color: #64748b; font-size: 12px; text-transform: uppercase; margin: 0 0 5px 0; }
+.stat-value { color: #3b82f6; margin: 0; font-size: 24px; }
 
-.dash-header .logo {
-    font-size: 24px;
-    margin: 0;
-}
+.mining-display { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; background: #0f172a; padding: 15px; border-radius: 8px; }
+.pending-box h3 { color: #10b981; margin: 5px 0 0 0; font-size: 22px; }
+.pending-box p { margin: 0; font-size: 12px; color: #64748b; }
+.mining-info { font-size: 12px; color: #64748b; text-align: center; margin: 0; }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 20px;
-}
+/* Investment Hub Styles */
+.investment-hub h3, .active-investments h3 { margin-top: 0; color: #e2e8f0; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+.hub-subtitle { color: #64748b; font-size: 13px; margin-top: -5px; }
+.product-grid { display: grid; gap: 15px; }
+.product-card { background: #0f172a; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #334155; }
+.product-icon { font-size: 32px; margin-bottom: 10px; }
+.product-icon.green { color: #10b981; }
+.product-icon.yellow { color: #f59e0b; }
+.product-icon.blue { color: #3b82f6; }
+.product-card h4 { margin: 0 0 5px 0; color: #e2e8f0; }
+.roi { color: #10b981; font-weight: bold; font-size: 14px; margin: 5px 0 15px 0; }
+.btn-invest { background: #334155; color: white; width: 100%; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-invest:hover { background: #3b82f6; }
 
-.stat-card {
-    padding: 20px;
-    margin: 0;
-}
-
-.stat-label {
-    color: #64748b;
-    font-size: 12px;
-    text-transform: uppercase;
-    margin: 0 0 5px 0;
-}
-
-.stat-value {
-    color: #3b82f6;
-    margin: 0;
-    font-size: 24px;
-}
-
-.mining-display {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0;
-    background: #0f172a;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.pending-box h3 {
-    color: #10b981;
-    margin: 5px 0 0 0;
-    font-size: 22px;
-}
-
-.pending-box p {
-    margin: 0;
-    font-size: 12px;
-    color: #64748b;
-}
-
-.mining-info {
-    font-size: 12px;
-    color: #64748b;
-    text-align: center;
-    margin: 0;
-}
-
-.referral-card h3, .mining-card h3 {
-    margin-top: 0;
-    color: #e2e8f0;
-}
+/* Active Investments Styles */
+.empty-text { color: #64748b; font-style: italic; text-align: center; font-size: 13px; }
+.active-investment-item { background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
+.roi-badge { background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; vertical-align: middle; }
+.yield-text { color: #f59e0b; font-weight: bold; }
+.btn-harvest { padding: 8px 12px; font-size: 12px; margin: 0; }
+.referral-card h3 { margin-top: 0; color: #e2e8f0; }
