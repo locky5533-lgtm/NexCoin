@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoMine - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 id="formTitle">Sign Up / Login</h2>
+        
+        <!-- Auth Section -->
+        <div id="auth-section">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <p>Referral Code: <span id="refDisplay">None</span></p>
+            <button id="signupBtn">Sign Up</button>
+            <button id="loginBtn">Login</button>
+        </div>
+
+        <!-- Dashboard Section (Hidden until login) -->
+        <div id="dashboard" style="display: none;">
+            <h2>Dashboard</h2>
+            <p>Your Balance: <span id="balance">0</span> MINE</p>
+            <p>Your Referral Link: <input type="text" id="refLink" readonly></p>
+            <button id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // PASTE YOUR FIREBASE CONFIG HERE
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Export to window so app.js can use them
+        window.firebaseAuth = auth;
+        window.firebaseDb = db;
+    </script>
+</body>
+</html>
