@@ -18,7 +18,7 @@ window.addEventListener('load', () => {
     let inviteCode = urlParams.get('inviteCode') || "None";
     document.getElementById('refDisplay').innerText = inviteCode;
 
-    // 1. Sign Up Logic (With Multi-Level Referrals)
+    // 1. Sign Up (Saves referral code, but doesn't pay out automatically due to security)
     document.getElementById('signupBtn').addEventListener('click', async () => {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -34,64 +34,6 @@ window.addEventListener('load', () => {
                 myRefCode: newRefCode, createdAt: new Date().toISOString(),
                 streak: 0, lastCheckIn: null, tasks: { telegram: false, twitter: false, video: false }
             });
-
-            // MULTI-LEVEL REFERRAL LOGIC
-            if (inviteCode !== "None") {
-                const dbRef = ref(db);
-                const snapshot = await get(child(dbRef, `users`));
-                if (snapshot.exists()) {
-                    const users = snapshot.val();
-                    
-                    // Find Level 1 (Direct Referrer)
-                    let l1_id = null;
-                    for (let uid in users) {
-                        if (users[uid].myRefCode === inviteCode) { l1_id = uid; break; }
-                    }
-
-                    if (l1_id) {
-                        const l1_data = users[l1_id];
-                        await update(ref(db, 'users/' + l1_id), { 
-                            balance: (l1_data.balance || 0) + 10,
-                            lifetimeEarned: (l1_data.lifetimeEarned || 0) + 10,
-                            referralEarnings: (l1_data.referralEarnings || 0) + 10
-                        });
-
-                        // Find Level 2 (L1's Referrer)
-                        const l1_refCode = l1_data.referredBy;
-                        if (l1_refCode) {
-                            let l2_id = null;
-                            for (let uid in users) {
-                                if (users[uid].myRefCode === l1_refCode) { l2_id = uid; break; }
-                            }
-                            if (l2_id) {
-                                const l2_data = users[l2_id];
-                                await update(ref(db, 'users/' + l2_id), { 
-                                    balance: (l2_data.balance || 0) + 3,
-                                    lifetimeEarned: (l2_data.lifetimeEarned || 0) + 3,
-                                    referralEarnings: (l2_data.referralEarnings || 0) + 3
-                                });
-
-                                // Find Level 3 (L2's Referrer)
-                                const l2_refCode = l2_data.referredBy;
-                                if (l2_refCode) {
-                                    let l3_id = null;
-                                    for (let uid in users) {
-                                        if (users[uid].myRefCode === l2_refCode) { l3_id = uid; break; }
-                                    }
-                                    if (l3_id) {
-                                        const l3_data = users[l3_id];
-                                        await update(ref(db, 'users/' + l3_id), { 
-                                            balance: (l3_data.balance || 0) + 1,
-                                            lifetimeEarned: (l3_data.lifetimeEarned || 0) + 1,
-                                            referralEarnings: (l3_data.referralEarnings || 0) + 1
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             window.showToast("Account created successfully!");
         } catch (error) { window.showToast(error.message, "fa-circle-exclamation"); }
     });
@@ -107,7 +49,7 @@ window.addEventListener('load', () => {
         window.showToast("Referral link copied!", "fa-clipboard-check");
     });
 
-    // 2. Profile Modal Logic
+    // 2. Profile Modal
     document.getElementById('openProfileBtn').addEventListener('click', async () => {
         const user = auth.currentUser;
         const snapshot = await get(ref(db, 'users/' + user.uid));
@@ -120,14 +62,12 @@ window.addEventListener('load', () => {
     document.getElementById('closeProfileModal').addEventListener('click', () => document.getElementById('profileModal').style.display = 'none');
     document.getElementById('saveProfileBtn').addEventListener('click', async () => {
         const user = auth.currentUser;
-        const username = document.getElementById('usernameInput').value;
-        const country = document.getElementById('countryInput').value;
-        await update(ref(db, 'users/' + user.uid), { username: username, country: country });
+        await update(ref(db, 'users/' + user.uid), { username: document.getElementById('usernameInput').value, country: document.getElementById('countryInput').value });
         window.showToast("Profile updated!");
         document.getElementById('profileModal').style.display = 'none';
     });
 
-    // 3. Mining Logic
+    // 3. Mining
     let miningInterval; let pendingNex = 0;
     document.getElementById('claimBtn').addEventListener('click', async () => {
         const user = auth.currentUser; if (!user || pendingNex <= 0) return;
@@ -176,7 +116,7 @@ window.addEventListener('load', () => {
         }
     };
 
-    // 5. Check-in & Tasks (Same as before)
+    // 5. Check-in & Tasks
     document.getElementById('checkinBtn').addEventListener('click', async () => {
         const user = auth.currentUser; if (!user) return;
         const userRef = ref(db, 'users/' + user.uid); const snapshot = await get(userRef);
@@ -231,7 +171,69 @@ window.addEventListener('load', () => {
         }
     });
 
-    // 7. Auth State & Real-time Updates
+    // 7. SECURE MULTI-LEVEL REFERRAL CLAIM LOGIC
+    window.claimReferrals = async () => {
+        const user = auth.currentUser; if (!user) return;
+        const btn = document.getElementById('claimRefBtn');
+        btn.innerText = "Checking..."; btn.disabled = true;
+
+        try {
+            const mySnap = await get(ref(db, 'users/' + user.uid));
+            if (!mySnap.exists()) return;
+            const myData = mySnap.val();
+            const myRefCode = myData.myRefCode;
+            
+            const allUsersSnap = await get(ref(db, 'users'));
+            const claimedSnap = await get(ref(db, 'referralsClaimed/' + user.uid));
+            
+            const allUsers = allUsersSnap.val() || {};
+            const claimed = claimedSnap.val() || {};
+            
+            let l1 = [], l2 = [], l3 = [];
+            
+            // Find L1, L2, L3 users
+            for (let uid in allUsers) {
+                if (allUsers[uid].referredBy === myRefCode) l1.push(uid);
+            }
+            for (let l1_uid of l1) {
+                let l1_refCode = allUsers[l1_uid].myRefCode;
+                for (let uid in allUsers) {
+                    if (allUsers[uid].referredBy === l1_refCode) {
+                        l2.push(uid);
+                        let l2_refCode = allUsers[uid].myRefCode;
+                        for (let uid2 in allUsers) {
+                            if (allUsers[uid2].referredBy === l2_refCode) l3.push(uid2);
+                        }
+                    }
+                }
+            }
+            
+            let totalEarned = 0;
+            let updates = {};
+            let newClaimsCount = 0;
+            
+            l1.forEach(uid => { if (!claimed[uid]) { totalEarned += 10; newClaimsCount++; updates[`referralsClaimed/${user.uid}/${uid}`] = true; } });
+            l2.forEach(uid => { if (!claimed[uid]) { totalEarned += 3; newClaimsCount++; updates[`referralsClaimed/${user.uid}/${uid}`] = true; } });
+            l3.forEach(uid => { if (!claimed[uid]) { totalEarned += 1; newClaimsCount++; updates[`referralsClaimed/${user.uid}/${uid}`] = true; } });
+            
+            if (totalEarned > 0) {
+                updates[`users/${user.uid}/balance`] = (parseFloat(myData.balance) || 0) + totalEarned;
+                updates[`users/${user.uid}/lifetimeEarned`] = (parseFloat(myData.lifetimeEarned) || 0) + totalEarned;
+                updates[`users/${user.uid}/referralEarnings`] = (parseFloat(myData.referralEarnings) || 0) + totalEarned;
+                
+                await update(ref(db), updates);
+                window.showToast(`Claimed ${totalEarned} NEX from ${newClaimsCount} referrals!`);
+            } else {
+                window.showToast("No new referrals to claim", "fa-circle-info");
+            }
+        } catch(e) {
+            window.showToast("Error claiming", "fa-triangle-exclamation");
+        } finally {
+            btn.innerText = "Claim Referral Bonuses"; btn.disabled = false;
+        }
+    };
+
+    // 8. Auth State & Real-time Updates
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             document.getElementById('auth-section').style.display = 'none';
@@ -255,7 +257,6 @@ window.addEventListener('load', () => {
                 }
             });
 
-            // Real-time Leaderboard & Referral Count
             const allUsersRef = ref(db, 'users');
             onValue(allUsersRef, (snapshot) => {
                 let refCount = 0;
@@ -270,10 +271,8 @@ window.addEventListener('load', () => {
                 document.getElementById('friendsInvited').innerText = refCount;
                 document.getElementById('refCountDetail').innerText = refCount;
 
-                // Sort by lifetimeEarned for Leaderboard
                 usersArray.sort((a, b) => (b.lifetimeEarned || 0) - (a.lifetimeEarned || 0));
                 let top5 = usersArray.slice(0, 5);
-                
                 let lbHtml = '';
                 top5.forEach((u, index) => {
                     let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index+1}`;
